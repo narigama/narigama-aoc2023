@@ -1,5 +1,7 @@
 use std::str::FromStr;
 
+use eyre::ContextCompat;
+
 #[derive(Debug, Default)]
 pub struct Set {
     pub red: u64,
@@ -21,7 +23,7 @@ impl FromStr for Set {
         for colour_raw in s.split(", ") {
             let (value, colour) = colour_raw
                 .split_once(' ')
-                .ok_or_else(|| eyre::eyre!("colour `{colour_raw}` was malformed"))?;
+                .context(format!("colour `{colour_raw}` was malformed"))?;
 
             let value: u64 = value.parse()?;
 
@@ -46,11 +48,9 @@ impl FromStr for Game {
     type Err = eyre::Error;
 
     fn from_str(s: &str) -> eyre::Result<Self> {
-        let (game_raw, sets_raw) = s.split_once(": ").ok_or_else(|| eyre::eyre!("Malformed Game {s}"))?;
+        let (game_raw, sets_raw) = s.split_once(": ").context(format!("Malformed Game {s}"))?;
 
-        let (_, id_raw) = game_raw
-            .split_once(' ')
-            .ok_or_else(|| eyre::eyre!("Malformed Game {s}"))?;
+        let (_, id_raw) = game_raw.split_once(' ').context(format!("Malformed Game {s}"))?;
 
         let id = id_raw.parse()?;
         let sets = sets_raw
@@ -94,17 +94,8 @@ pub fn main() -> eyre::Result<()> {
     let input = crate::util::get_input(2023, 2)?;
     let games = input.lines().map(Game::from_str).collect::<eyre::Result<Vec<_>>>()?;
 
-    tracing::info!("Y2023D02P01: {}", part_one(&games)?);
-    tracing::info!("Y2023D02P02: {}", part_two(&games)?);
+    tracing::info!("Part One: {}", part_one(&games)?);
+    tracing::info!("Part Two: {}", part_two(&games)?);
 
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_part_one() {}
-
-    #[test]
-    fn test_part_two() {}
 }

@@ -1,0 +1,34 @@
+{
+    "eyre::Result": {
+        "prefix": "er",
+        "body": [
+            "eyre::Result<$1>",
+        ]
+    },
+    "day": {
+        "prefix": "day",
+        "body": [
+            "pub fn part_one(input: &str) -> eyre::Result<u64> {",
+            "    let mut acc = 0;",
+            "    Ok(acc)",
+            "}",
+            "",
+            "pub fn part_two(input: &str) -> eyre::Result<u64> {",
+            "    let mut acc = 0;",
+            "    Ok(acc)",
+            "}",
+            "",
+            "pub fn main() -> eyre::Result<()> {",
+            "    let input = crate::util::get_input($1, $2)?;",
+            "",
+            "    $0",
+            "",
+            "    tracing::info!(\"Y$1D$2P01: {}\", part_one(&input)?);",
+            "    tracing::info!(\"Y$1D$2P02: {}\", part_two(&input)?);",
+            "",
+            "    Ok(())",
+            "}"
+        ],
+        "description": ""
+    }
+}

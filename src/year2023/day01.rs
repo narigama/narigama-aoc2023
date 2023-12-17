@@ -1,3 +1,5 @@
+use eyre::ContextCompat;
+
 const NUMBERS: [(&str, u64); 9] = [
     ("one", 1),
     ("two", 2),
@@ -23,8 +25,10 @@ fn parse_numbers_and_words(line: &str) -> eyre::Result<Vec<u64>> {
     let mut results = Vec::new();
 
     for i in 0..line.chars().count() {
-        // we've checked line length, unwrap doesn't risk out of bounds
-        let c = line.chars().nth(i).unwrap();
+        let c = line
+            .chars()
+            .nth(i)
+            .context(format!("{i} was out of bounds for {line}"))?;
 
         if c.is_numeric() {
             results.push(c.to_string().parse()?)
@@ -47,13 +51,8 @@ fn solve(input: &str, line_to_numbers: impl Sync + Fn(&str) -> eyre::Result<Vec<
         .map(|line| {
             let digits = line_to_numbers(line)?;
 
-            eyre::ensure!(
-                !digits.is_empty(),
-                "no digits found for line `{line}`. Unable to form a two digit number."
-            );
-
-            let first = digits.first().unwrap();
-            let last = digits.last().unwrap();
+            let first = digits.first().context("line didn't contain digits")?;
+            let last = digits.last().context("line didn't contain digits")?;
             Ok(first * 10 + last)
         })
         .collect::<eyre::Result<Vec<_>>>()?
@@ -72,8 +71,8 @@ pub fn part_two(input: &str) -> eyre::Result<u64> {
 pub fn main() -> eyre::Result<()> {
     let input = crate::util::get_input(2023, 1)?;
 
-    tracing::info!("Y2023D01P01: {}", part_one(&input)?);
-    tracing::info!("Y2023D01P02: {}", part_two(&input)?);
+    tracing::info!("Part One: {}", part_one(&input)?);
+    tracing::info!("Part Two: {}", part_two(&input)?);
 
     Ok(())
 }

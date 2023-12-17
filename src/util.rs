@@ -61,7 +61,7 @@ pub fn get_input(year: u64, day: u64) -> eyre::Result<String> {
             .ok_or_else(|| eyre::eyre!("couldn't create cache dirs"))?,
     )?;
 
-    std::fs::write(file_path, &response)?;
+    std::fs::write(file_path, response.trim())?;
 
     Ok(response)
 }
