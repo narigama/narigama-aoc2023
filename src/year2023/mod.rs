@@ -3,6 +3,7 @@ pub mod day02;
 pub mod day03;
 pub mod day04;
 pub mod day05;
+pub mod day06;
 
 pub fn main() -> eyre::Result<()> {
     day01::main()?;
@@ -10,6 +11,7 @@ pub fn main() -> eyre::Result<()> {
     day03::main()?;
     day04::main()?;
     day05::main()?;
+    day06::main()?;
 
     Ok(())
 }
